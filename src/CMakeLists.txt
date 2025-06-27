@@ -12,6 +12,8 @@ add_executable(ezOutletTray
     main.cpp
     traycontroller.cpp
     traycontroller.h
+    settingsdialog.cpp
+    settingsdialog.h
 )
 
 target_link_libraries(ezOutletTray

@@ -1,4 +1,6 @@
 #include "traycontroller.h"
+#include "settingsdialog.h"
+#include <QSettings>
 #include <QApplication>
 #include <QIcon>
 #include <QNetworkRequest>
@@ -9,13 +11,17 @@
 TrayController::TrayController()
     : actionOn("Turn On", this),
       actionOff("Turn Off", this),
+      actionSettings("Settings", this),
       actionQuit("Quit", this)
 {
     trayIcon.setIcon(QIcon::fromTheme("network-wired"));
     trayIcon.setToolTip("ezOutlet5 Controller");
 
+    loadSettings();
+
     menu.addAction(&actionOn);
     menu.addAction(&actionOff);
+    menu.addAction(&actionSettings);
     menu.addSeparator();
     menu.addAction(&actionQuit);
 
@@ -23,6 +29,7 @@ TrayController::TrayController()
 
     connect(&actionOn, &QAction::triggered, this, &TrayController::turnOn);
     connect(&actionOff, &QAction::triggered, this, &TrayController::turnOff);
+    connect(&actionSettings, &QAction::triggered, this, &TrayController::openSettings);
     connect(&actionQuit, &QAction::triggered, this, &TrayController::quit);
 }
 
@@ -44,10 +51,12 @@ void TrayController::quit() {
 }
 
 void TrayController::sendCommand(bool on) {
-    QString urlStr = QString("http://%1/cgi-bin/control.cgi?user=%2&passwd=%1&target=1&control=%3")
-        .arg(outletIp)
-        .arg(username)
-        .arg(on ? "1" : "0");
+    QString urlStr =
+        QString("http://%1/cgi-bin/control.cgi?user=%2&passwd=%3&target=1&control=%4")
+            .arg(outletIp)
+            .arg(username)
+            .arg(password)
+            .arg(on ? "1" : "0");
 
     QUrl url(urlStr);
     QNetworkRequest request(url);
@@ -58,4 +67,32 @@ void TrayController::sendCommand(bool on) {
     request.setRawHeader("Authorization", "Basic " + base64);
 
     networkManager.get(request);
+}
+
+void TrayController::openSettings() {
+    SettingsDialog dialog;
+    dialog.setIp(outletIp);
+    dialog.setUsername(username);
+    dialog.setPassword(password);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        outletIp = dialog.ip();
+        username = dialog.username();
+        password = dialog.password();
+        saveSettings();
+    }
+}
+
+void TrayController::loadSettings() {
+    QSettings settings;
+    outletIp = settings.value("outletIp", outletIp).toString();
+    username = settings.value("username", username).toString();
+    password = settings.value("password", password).toString();
+}
+
+void TrayController::saveSettings() {
+    QSettings settings;
+    settings.setValue("outletIp", outletIp);
+    settings.setValue("username", username);
+    settings.setValue("password", password);
 }
