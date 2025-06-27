@@ -23,6 +23,7 @@ private:
     void sendCommand(bool on);
     void loadSettings();
     void saveSettings();
+    QString settingsFilePath() const;
 
     QSystemTrayIcon trayIcon;
     QMenu menu;

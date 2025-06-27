@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QDir>
 #include <QCoreApplication>
+#include <QStandardPaths>
 
 TrayController::TrayController()
     : actionOn("Turn On", this),
@@ -86,6 +87,13 @@ void TrayController::openSettings() {
     }
 }
 
+QString TrayController::settingsFilePath() const {
+    const QString dir =
+        QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QDir().mkpath(dir);
+    return QDir(dir).filePath("config.ini");
+}
+
 void TrayController::loadSettings() {
     QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
                        QSettings::IniFormat);
@@ -97,10 +105,10 @@ void TrayController::loadSettings() {
 }
 
 void TrayController::saveSettings() {
-    QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
-                       QSettings::IniFormat);
-    outletIp = settings.value("outletIp", outletIp).toString();
-    username = settings.value("username", username).toString();
-    password = settings.value("password", password).toString();
+    QSettings settings(settingsFilePath(), QSettings::IniFormat);
+    settings.setValue("outletIp", outletIp);
+    settings.setValue("username", username);
+    settings.setValue("password", password);
+    settings.sync();
 }
 
