@@ -7,6 +7,9 @@
 #include <QUrl>
 #include <QAuthenticator>
 #include <QTimer>
+#include <QFile>
+#include <QDir>
+#include <QCoreApplication>
 
 TrayController::TrayController()
     : actionOn("Turn On", this),
@@ -84,6 +87,18 @@ void TrayController::openSettings() {
 }
 
 void TrayController::loadSettings() {
+    QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
+                       QSettings::IniFormat);
+    if (QFile::exists(settings.fileName())) {
+        outletIp = settings.value("outletIp", outletIp).toString();
+        username = settings.value("username", username).toString();
+        password = settings.value("password", password).toString();
+    }
+}
+
+void TrayController::saveSettings() {
+    QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
+                       QSettings::IniFormat);
     QSettings settings;
     outletIp = settings.value("outletIp", outletIp).toString();
     username = settings.value("username", username).toString();
@@ -92,7 +107,5 @@ void TrayController::loadSettings() {
 
 void TrayController::saveSettings() {
     QSettings settings;
-    settings.setValue("outletIp", outletIp);
-    settings.setValue("username", username);
-    settings.setValue("password", password);
+
 }
