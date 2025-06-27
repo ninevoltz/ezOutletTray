@@ -99,13 +99,8 @@ void TrayController::loadSettings() {
 void TrayController::saveSettings() {
     QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
                        QSettings::IniFormat);
-    QSettings settings;
     outletIp = settings.value("outletIp", outletIp).toString();
     username = settings.value("username", username).toString();
     password = settings.value("password", password).toString();
 }
 
-void TrayController::saveSettings() {
-    QSettings settings;
-
-}
