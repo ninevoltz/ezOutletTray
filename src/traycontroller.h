@@ -17,19 +17,23 @@ private slots:
     void turnOn();
     void turnOff();
     void quit();
+    void openSettings();
 
 private:
     void sendCommand(bool on);
+    void loadSettings();
+    void saveSettings();
 
     QSystemTrayIcon trayIcon;
     QMenu menu;
     QAction actionOn;
     QAction actionOff;
+    QAction actionSettings;
     QAction actionQuit;
 
     QNetworkAccessManager networkManager;
 
-    const QString outletIp = "10.0.0.74";  // Replace with your ezOutlet5 IP
-    const QString username = "admin";
-    const QString password = "127D17";
+    QString outletIp = "10.0.0.74";  // Default IP
+    QString username = "admin";
+    QString password = "127D17";
 };
