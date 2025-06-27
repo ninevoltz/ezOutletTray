@@ -51,10 +51,12 @@ void TrayController::quit() {
 }
 
 void TrayController::sendCommand(bool on) {
-    QString urlStr = QString("http://%1/cgi-bin/control.cgi?user=%2&passwd=%1&target=1&control=%3")
-        .arg(outletIp)
-        .arg(username)
-        .arg(on ? "1" : "0");
+    QString urlStr =
+        QString("http://%1/cgi-bin/control.cgi?user=%2&passwd=%3&target=1&control=%4")
+            .arg(outletIp)
+            .arg(username)
+            .arg(password)
+            .arg(on ? "1" : "0");
 
     QUrl url(urlStr);
     QNetworkRequest request(url);
