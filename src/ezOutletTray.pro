@@ -4,7 +4,9 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    traycontroller.cpp
+    traycontroller.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
-    traycontroller.h
+    traycontroller.h \
+    settingsdialog.h
