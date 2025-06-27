@@ -95,10 +95,13 @@ QString TrayController::settingsFilePath() const {
 }
 
 void TrayController::loadSettings() {
-    QSettings settings(settingsFilePath(), QSettings::IniFormat);
-    outletIp = settings.value("outletIp", outletIp).toString();
-    username = settings.value("username", username).toString();
-    password = settings.value("password", password).toString();
+    QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
+                       QSettings::IniFormat);
+    if (QFile::exists(settings.fileName())) {
+        outletIp = settings.value("outletIp", outletIp).toString();
+        username = settings.value("username", username).toString();
+        password = settings.value("password", password).toString();
+    }
 }
 
 void TrayController::saveSettings() {
@@ -108,3 +111,4 @@ void TrayController::saveSettings() {
     settings.setValue("password", password);
     settings.sync();
 }
+
