@@ -95,7 +95,7 @@ QString TrayController::settingsFilePath() const {
 }
 
 void TrayController::loadSettings() {
-    QSettings settings(QDir(QCoreApplication::applicationDirPath()).filePath("config.ini"),
+    QSettings settings(settingsFilePath(),
                        QSettings::IniFormat);
     if (QFile::exists(settings.fileName())) {
         outletIp = settings.value("outletIp", outletIp).toString();
