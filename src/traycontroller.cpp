@@ -18,7 +18,7 @@ TrayController::TrayController()
       actionSettings("Settings", this),
       actionQuit("Quit", this)
 {
-    trayIcon.setIcon(QIcon::fromTheme("network-wired"));
+    trayIcon.setIcon(QIcon::fromTheme("system-shutdown"));
     trayIcon.setToolTip("ezOutlet5 Controller");
 
     loadSettings();
